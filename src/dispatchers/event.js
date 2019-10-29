@@ -38,3 +38,13 @@ export const eventFieldError = error => {
     }
   };
 };
+
+export const eventActiveModal = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(EventActions.setEventActiveModal());
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};

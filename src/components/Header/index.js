@@ -3,52 +3,60 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+/* Defined Constants */
+import { monthsYear, daysWeek } from '../../config/const';
+
 /* Dispatchers */
-import { setMonth } from '../dispatchers';
+import { currentDateChange } from '../../dispatchers';
 
 /* Style Components */
 import { Container } from './styled';
 
-const Header = ({ month, monthCalendar, onSetMonth }) => {
+const Header = ({ currentDate, onSetMonth }) => {
   const handleNextMonth = direction => onSetMonth(direction);
+  const { month, year, dayWeek, dayMonth } = currentDate;
 
   return (
     <Container>
       <div>
-        <h5>{month}</h5>
+        <h4>{`${monthsYear[month]} of ${year}`}</h4>
+        <h6>{`${daysWeek[dayWeek]} ${dayMonth}`}</h6>
       </div>
       <div className="icon-left">
-        {(monthCalendar > 0) && (
-          <span className="icon" onClick={() => handleNextMonth('<')}>
-            <i class="fas fa-angle-left"></i>
-          </span>
-        )}
+        <span className="icon" onClick={() => handleNextMonth('<')}>
+          <i className="fas fa-angle-left"></i>
+        </span>
       </div>
       <div className="icon-right">
-        {(monthCalendar < 11) && (
-          <span className="icon" onClick={() => handleNextMonth('>')}>
-            <i class="fas fa-angle-right"></i>
-          </span>
-        )}
+        <span className="icon" onClick={() => handleNextMonth('>')}>
+          <i className="fas fa-angle-right"></i>
+        </span>
       </div>
     </Container>
   )
 }
 
 Header.propTypes = {
-  month: PropTypes.string.isRequired,
-  monthCalendar: PropTypes.string.isRequired,
+  currentDate: PropTypes.shape({
+    dayWeek: PropTypes.number.isRequired,
+    dayMonth: PropTypes.number.isRequired,
+    month: PropTypes.number.isRequired,
+    year: PropTypes.number.isRequired,
+    dateNow: PropTypes.instanceOf(Date),
+  }),
   onSetMonth: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
+  const currentDate = (typeof state.get('calendarReducer').get('currentDate').dayWeek === 'undefined') ? state.get('calendarReducer').get('currentDate').toJS() : state.get('calendarReducer').get('currentDate');
+  // console.log('mapStateToProps week', currentDate);
   return {
-    monthCalendar: state.get('calendarReducer').get('month'),
+    currentDate,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
-  onSetMonth: direction => dispatch(setMonth(direction)),
+  onSetMonth: direction => dispatch(currentDateChange(direction)),
 })
 
 export default connect(

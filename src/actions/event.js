@@ -13,10 +13,10 @@ export const fetchingEventSuccess = data => {
   };
 };
 
-export const fetchingEventFailure = data => {
+export const fetchingEventFailure = error => {
   return {
     type: EventActions.FETCHING_EVENT_FAILURE,
-    payload: { data },
+    payload: { error },
   };
 };
 
@@ -31,5 +31,11 @@ export const setEventFieldError = error => {
   return {
     type: EventActions.SET_EVENT_FIELD_ERROR,
     payload: { error },
+  };
+};
+
+export const setEventActiveModal = () => {
+  return {
+    type: EventActions.SET_EVENT_ACTIVE_MODAL,
   };
 };

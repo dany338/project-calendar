@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 /* Components */
-import Month from '../Month';
-import Event from '../Event';
+import Month from '../components/Month';
+import Event from '../components/Event';
 
 /* Style Components */
 import { Container } from './styled';
@@ -15,15 +16,11 @@ class Calendar extends Component {
   }
 
   componentDidMount() {
-    const { getMyInformation } = this.props
-    getMyInformation()
+    console.log('componentDidMount calendar');
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { query, getMyInformation } = this.props
-    if(prevProps.query !== query) {
-      getMyInformation()
-    }
+    console.log('componentDidUpdate calendar', prevProps, prevState);
   }
 
   render() {
@@ -36,18 +33,24 @@ class Calendar extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  query: state.filtersMyReducer.filter.query,
-  myInformation: state.personalsReducer.data,
-  loading: state.personalsReducer.loading,
-  error: state.personalsReducer.error,
-})
+Calendar.propTypes = {
+  currentDate: PropTypes.shape({
+    dayWeek: PropTypes.number,
+    dayMonth: PropTypes.number,
+    month: PropTypes.number,
+    year: PropTypes.number,
+    dateNow: PropTypes.instanceOf(Date),
+  }),
+};
 
-const mapDispatchToProps = dispatch => ({
-  getMyInformation: () => dispatch(getMyInformationRequest()),
-})
+const mapStateToProps = state => {
+  const currentDate = (typeof state.get('calendarReducer').get('currentDate').dayWeek === 'undefined') ? state.get('calendarReducer').get('currentDate').toJS() : state.get('calendarReducer').get('currentDate');
+  // console.log('mapStateToProps calendar', currentDate);
+  return {
+    currentDate,
+  }
+};
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(withRouter(Calendar));

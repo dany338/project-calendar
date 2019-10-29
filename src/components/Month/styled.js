@@ -9,15 +9,24 @@ export const Container = styled.div`
   border-radius: 3px;
   margin-bottom: 3px;
 
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .days {
-    display: grid;
-    grid-gap: 24px;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .weeks {
-    display: grid;
-    grid-gap: 24px;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
   }
 `;

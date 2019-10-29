@@ -9,7 +9,8 @@ const INITIAL_STATE = fromJS({
   },
   loading: false,
   error: '',
-  data: {},
+  data: [],
+  active: false,
 });
 
 const eventReducer = (state = INITIAL_STATE, { type, payload }) => {
@@ -24,19 +25,19 @@ const eventReducer = (state = INITIAL_STATE, { type, payload }) => {
       return state
         .set('loading', false)
         .set('error', '')
-        .set('data', data);
+        .set('data', [...state.get('data').toArray(), data]);
     }
 
     case EventActions.FETCHING_EVENT_FAILURE: {
-      const { data } = payload;
+      const { error } = payload;
       return state
         .set('loading', false)
-        .set('data', data);
+        .set('error', error);
     }
 
     case EventActions.SET_EVENT_FORM_CHANGE: {
       const { name, value } = payload;
-      const eventForm = (typeof state.get('eventForm').city === 'undefined') ? state.get('eventForm').toJS() : state.get('eventForm');
+      const eventForm = {...state.get('eventForm').toJS()};
       console.log('SET_EVENT_FORM_CHANGE', eventForm);
       return state
         .set('eventForm', { ...eventForm, [name]: value });
@@ -46,6 +47,12 @@ const eventReducer = (state = INITIAL_STATE, { type, payload }) => {
       const { error } = payload;
       return state
         .set('error', error);
+    }
+
+    case EventActions.SET_EVENT_ACTIVE_MODAL: {
+      console.log('SET_EVENT_ACTIVE_MODAL reducer',!state.get('active'));
+      return state
+        .set('active', !state.get('active'));
     }
 
     default: {

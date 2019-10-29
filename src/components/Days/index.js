@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 /* Defined Constants */
-import { daysWeek } from '../config/const';
+import { daysWeek } from '../../config/const';
 
 /* Style Components */
 import { Container } from './styled';
@@ -21,15 +21,15 @@ Days.propTypes = {
   day: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = state => {
-  return null
-};
+// const mapStateToProps = state => {
+//   return null
+// };
 
-const mapDispatchToProps = dispatch => {
-  return null
-};
+// const mapDispatchToProps = dispatch => {
+//   return null
+// };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  null,
+  null
 )(withRouter(Days));

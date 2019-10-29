@@ -14,6 +14,10 @@ export const Container = styled.div`
     color: #3c4043;
   }
 
+  h6 {
+    color: #c3c3c3;
+  }
+
   .icon-left {
     display: flex;
     flex-direction: row;
