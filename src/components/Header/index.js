@@ -12,15 +12,20 @@ import { currentDateChange } from '../../dispatchers';
 /* Style Components */
 import { Container } from './styled';
 
-const Header = ({ currentDate, onSetMonth }) => {
+const Header = ({ currentDate, dateSelected, onSetMonth }) => {
   const handleNextMonth = direction => onSetMonth(direction);
   const { month, year, dayWeek, dayMonth } = currentDate;
+  const dayCurrent = dateSelected.getDate();
+  const dayCurrentWeek = dateSelected.getDay();
+  const monthCurrent = dateSelected.getMonth();
+  const yearCurrent = dateSelected.getFullYear();
 
   return (
     <Container>
       <div>
         <h4>{`${monthsYear[month]} of ${year}`}</h4>
-        <h6>{`${daysWeek[dayWeek]} ${dayMonth}`}</h6>
+        {/* <h6>{`${daysWeek[dayWeek]} ${dayMonth}`}</h6> */}
+        <h6>{`Date Selected: ${daysWeek[dayCurrentWeek]}, ${dayCurrent} of ${monthsYear[monthCurrent]} of ${yearCurrent}`}</h6>
       </div>
       <div className="icon-left">
         <span className="icon" onClick={() => handleNextMonth('<')}>
@@ -44,6 +49,7 @@ Header.propTypes = {
     year: PropTypes.number.isRequired,
     dateNow: PropTypes.instanceOf(Date),
   }),
+  dateSelected: PropTypes.instanceOf(Date),
   onSetMonth: PropTypes.func.isRequired,
 };
 
@@ -52,6 +58,7 @@ const mapStateToProps = state => {
   // console.log('mapStateToProps week', currentDate);
   return {
     currentDate,
+    dateSelected: state.get('calendarReducer').get('dateSelected'),
   }
 };
 

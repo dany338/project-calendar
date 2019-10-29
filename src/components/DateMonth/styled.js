@@ -14,12 +14,23 @@ export const Container = styled.div`
   margin: 20px;
   color: ${(props) => (props.dayMonthCurrent) ? '#3c4043' : '#c3c3c3' };
 
+  .add-event {
+    justify-content: flex-end;
+  }
+
   &.selected {
     background-color: #00000014;
     background-image: linear-gradient(-180deg,rgba(10,212,250,0.86) 0%,rgba(37,187,241,0.86) 100%);
     box-shadow: 0 0 40px rgba(0,0,0,.4);
     transform: scale(1.1);
     border: 0;
+    justify-content: space-between;
+    cursor: pointer;
+    color: #FFFFFF;
+
+    .icon:hover {
+      color: #000000;
+    }
   }
 
   &:hover {

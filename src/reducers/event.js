@@ -3,9 +3,11 @@ import * as EventActions from '../typesActions';
 
 const INITIAL_STATE = fromJS({
   eventForm: {
+    title: '',
     city: '',
     date: '',
     time: '',
+    description: '',
   },
   loading: false,
   error: '',

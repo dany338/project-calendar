@@ -4,12 +4,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 /* Dispatchers */
-import { dateSelectedChange } from '../../dispatchers';
+import { dateSelectedChange, eventActiveModal } from '../../dispatchers';
 
 /* Style Components */
 import { Container } from './styled';
 
-const DateMonth = ({ dateWeek, currentDate, dateSelected, onDateSelectedChange }) => {
+const DateMonth = ({ dateWeek, currentDate, dateSelected, onDateSelectedChange, onEventActiveModal }) => {
   const { dayMonthWeek, monthWeek, yearMonthWeek, dateMonthWeek } = dateWeek;
   const { month } = currentDate;
 
@@ -19,11 +19,28 @@ const DateMonth = ({ dateWeek, currentDate, dateSelected, onDateSelectedChange }
   const classSelected = ((dayMonthWeek === dayCurrent) && (monthWeek === monthCurrent) && (yearMonthWeek === yearCurrent)) ? 'selected' : '';
   const isDayMonthCurrent = (monthWeek === month);
 
-  const handleCurrentDateChange = () => onDateSelectedChange(dateMonthWeek);
+  const handleCurrentDateChange = (e) => {
+    onDateSelectedChange(dateMonthWeek)
+    e.stopPropagation();
+  };
+
+  const handleAddEvent = (e) => {
+    onEventActiveModal();
+    e.stopPropagation();
+  }
 
   return (
-    <Container dayMonthCurrent={isDayMonthCurrent} className={classSelected} onClick={() => handleCurrentDateChange()}>
-      {dayMonthWeek}
+    <Container dayMonthCurrent={isDayMonthCurrent} className={classSelected} onClick={(e) => handleCurrentDateChange(e)}>
+      <div>
+        {dayMonthWeek}
+      </div>
+      <div className="add-event">
+        {classSelected && (
+          <span className="icon" onClick={(e) => handleAddEvent(e)} title="Add Event">
+            <i className="far fa-calendar-plus"></i>
+          </span>
+        )}
+      </div>
     </Container>
   )
 }
@@ -44,6 +61,7 @@ DateMonth.propTypes = {
   }),
   dateSelected: PropTypes.instanceOf(Date),
   onDateSelectedChange: PropTypes.func.isRequired,
+  onEventActiveModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -57,6 +75,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   onDateSelectedChange: dateSelected => dispatch(dateSelectedChange(dateSelected)),
+  onEventActiveModal: () => dispatch(eventActiveModal()),
 })
 
 export default connect(

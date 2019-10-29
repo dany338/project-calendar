@@ -22,6 +22,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    align-self: flex-start;
 
     span {
       margin-left: 5px;
@@ -34,6 +35,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    align-self: flex-start;
 
     span {
       margin-left: 5px;
