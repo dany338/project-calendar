@@ -17,11 +17,11 @@ export const eventRequest = () => {
   };
 };
 
-export const eventFormChange = (name, value) => {
+export const eventFormChange = eventForm => {
   return async (dispatch, getState) => {
     // const state = getState().get('loginReducer'); // getState() normally without immutable
     try {
-      dispatch(EventActions.setEventFormChange(name, value));
+      dispatch(EventActions.setEventFormChange(eventForm));
     } catch (error) {
       console.log(error.message);
     }

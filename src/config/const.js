@@ -132,10 +132,24 @@ export const getWeeksInMonth = (month, year) => {
   return weeks;
 };
 
+export const searchReminder = (data, dateWeek) => {
+  if(data.length > 0) {
+    const { dayMonthWeek, monthWeek, yearMonthWeek, dateMonthWeek } = dateWeek;
+    const result = data.filter(({ dateReminder }) => {
+      return ((dateReminder.getDate() === dayMonthWeek) && (dateReminder.getMonth() === monthWeek) && (dateReminder.getFullYear() === yearMonthWeek));
+    });
+    return result;
+  } else {
+    return data;
+  }
+}
+
 export const wait = (ms) => new Promise((resolve) => {
   setTimeout(() => {
     resolve();
   }, ms);
 });
+
+export const API_KEY_WEATHER = '74a6e84c51148b563b620e01f0f09794';
 
 export const URL_API_WEATHER = '';

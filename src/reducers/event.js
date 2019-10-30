@@ -1,13 +1,16 @@
 import { fromJS } from 'immutable';
 import * as EventActions from '../typesActions';
 
+/* Defined Constants */
+const now = new Date();
+
 const INITIAL_STATE = fromJS({
   eventForm: {
     title: '',
     city: '',
-    date: '',
+    dateReminder: now,
     time: '',
-    description: '',
+    color: '',
   },
   loading: false,
   error: '',
@@ -38,11 +41,11 @@ const eventReducer = (state = INITIAL_STATE, { type, payload }) => {
     }
 
     case EventActions.SET_EVENT_FORM_CHANGE: {
-      const { name, value } = payload;
-      const eventForm = {...state.get('eventForm').toJS()};
+      const { eventForm } = payload;
       console.log('SET_EVENT_FORM_CHANGE', eventForm);
       return state
-        .set('eventForm', { ...eventForm, [name]: value });
+        .set('eventForm', eventForm)
+        .set('data', [...state.get('data'), eventForm]);
     }
 
     case EventActions.SET_EVENT_FIELD_ERROR: {

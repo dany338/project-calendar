@@ -20,10 +20,10 @@ export const fetchingEventFailure = error => {
   };
 };
 
-export const setEventFormChange = (name, value) => {
+export const setEventFormChange = eventForm => {
   return {
     type: EventActions.SET_EVENT_FORM_CHANGE,
-    payload: { name, value },
+    payload: { eventForm },
   };
 };
 

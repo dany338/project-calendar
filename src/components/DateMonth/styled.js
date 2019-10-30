@@ -15,7 +15,9 @@ export const Container = styled.div`
   color: ${(props) => (props.dayMonthCurrent) ? '#3c4043' : '#c3c3c3' };
 
   .add-event {
-    justify-content: flex-end;
+    .icon {
+      justify-content: flex-end;
+    }
   }
 
   &.selected {
