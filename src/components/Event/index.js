@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import useForm from 'react-hook-form';
+import nanoid from 'nanoid';
 
 /* Defined Constants */
-import { monthsYear, daysWeek, wait } from '../../config/const';
+import { monthsYear, daysWeek, wait, searchReminderById } from '../../config/const';
 
 /* Dispatchers */
-import { eventActiveModal, eventFormChange } from '../../dispatchers';
+import { eventActiveModal, remindersListActiveModal, eventFormChange } from '../../dispatchers';
 
 import { Container } from './styled';
 
-const Event = ({ active, dateSelected, onEventActiveModal, onEventFormChange }) => {
+const Event = ({ active, dateSelected, reminders, reminderSelected, onEventActiveModal, onRemindersListActiveModal, onEventFormChange }) => {
   const { register, handleSubmit, watch, reset, errors } = useForm();
 
   const dayCurrentWeek = dateSelected.getDay();
@@ -20,18 +21,39 @@ const Event = ({ active, dateSelected, onEventActiveModal, onEventFormChange }) 
   const monthCurrent = dateSelected.getMonth();
   const yearCurrent = dateSelected.getFullYear();
   const handleCloseModal = (e) => { onEventActiveModal(); e.stopPropagation(); };
+  const findReminderSelected = (reminderSelected !== '') ? searchReminderById(reminders, reminderSelected) : 0;
+  console.log('findReminderSelected', findReminderSelected);
+
+  let titleEdit = '';
+  let cityEdit = '';
+  let timeEdit = '';
+  let colorEdit = '';
+
+  if(findReminderSelected.length === 1) {
+    titleEdit = findReminderSelected[0].title;
+    cityEdit = findReminderSelected[0].city;
+    timeEdit = findReminderSelected[0].time;
+    colorEdit = findReminderSelected[0].color;
+  }
 
   const onSubmit = async (data, e) => {
     console.log(data);
+    data.id = nanoid();
     data.dateReminder = new Date(data.dateReminder);
     onEventFormChange(data);
-    await wait(2000);
+    await wait(500);
     e.target.reset();
     onEventActiveModal();
     e.stopPropagation();
   };
 
-  console.log(watch('title'));
+  const handleOpenReminderModal = (e) => {
+    onEventActiveModal();
+    onRemindersListActiveModal();
+    e.stopPropagation();
+  }
+
+  // console.log(watch('title'));
 
   useEffect(() => {
     console.log('useEffect Event', active);
@@ -46,11 +68,14 @@ const Event = ({ active, dateSelected, onEventActiveModal, onEventFormChange }) 
             <header className="modal-card-head">
               <p className="modal-card-title title">
                 <span>
-                  {`Reminder for date: ${daysWeek[dayCurrentWeek]}, ${dayMonthCurrent} of ${monthsYear[monthCurrent]} of ${yearCurrent}`}<br />
-                  <span className="icon">
-                    <i className="far fa-calendar-plus"></i>
-                  </span>
+                  {`Reminder for date: ${daysWeek[dayCurrentWeek]}, ${dayMonthCurrent}`}<br />
+                  {`of ${monthsYear[monthCurrent]} of ${yearCurrent}`}<br />
                 </span>
+                {reminders.length > 0 && (
+                  <span className="icon" onClick={(e) => handleOpenReminderModal(e)}>
+                    <i className="fas fa-list-ul"></i>
+                  </span>
+                )}
               </p>
               <button type="button" className="delete" aria-label="close" onClick={(e) => handleCloseModal(e)}></button>
             </header>
@@ -116,17 +141,35 @@ const Event = ({ active, dateSelected, onEventActiveModal, onEventFormChange }) 
 Event.propTypes = {
   active: PropTypes.oneOf([true, false]).isRequired,
   dateSelected: PropTypes.instanceOf(Date),
+  reminders: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      title: PropTypes.string,
+      city: PropTypes.string,
+      dateReminder: PropTypes.instanceOf(Date),
+      time: PropTypes.string,
+      color: PropTypes.string,
+    })
+  ),
+  reminderSelected: PropTypes.string,
   onEventActiveModal: PropTypes.func.isRequired,
+  onRemindersListActiveModal: PropTypes.func.isRequired,
   onEventFormChange: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  active: state.get('eventReducer').get('active'),
-  dateSelected: state.get('calendarReducer').get('dateSelected'),
-});
+const mapStateToProps = state => {
+  const reminders = (!Array.isArray(state.get('eventReducer').get('data'))) ? state.get('eventReducer').get('data').toArray() : state.get('eventReducer').get('data');
+  return {
+    active: state.get('eventReducer').get('active'),
+    dateSelected: state.get('calendarReducer').get('dateSelected'),
+    reminders,
+    reminderSelected: state.get('eventReducer').get('reminderSelected'),
+  }
+};
 
 const mapDispatchToProps = dispatch => ({
   onEventActiveModal: () => dispatch(eventActiveModal()),
+  onRemindersListActiveModal: () => dispatch(remindersListActiveModal()),
   onEventFormChange: eventForm => dispatch(eventFormChange(eventForm)),
 });
 

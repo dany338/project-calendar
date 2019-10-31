@@ -6,6 +6,7 @@ const now = new Date();
 
 const INITIAL_STATE = fromJS({
   eventForm: {
+    id: '',
     title: '',
     city: '',
     dateReminder: now,
@@ -16,6 +17,8 @@ const INITIAL_STATE = fromJS({
   error: '',
   data: [],
   active: false,
+  activeList: false,
+  reminderSelected: '',
 });
 
 const eventReducer = (state = INITIAL_STATE, { type, payload }) => {
@@ -30,7 +33,7 @@ const eventReducer = (state = INITIAL_STATE, { type, payload }) => {
       return state
         .set('loading', false)
         .set('error', '')
-        .set('data', [...state.get('data').toArray(), data]);
+        .set('data', [...state.get('data'), data]);
     }
 
     case EventActions.FETCHING_EVENT_FAILURE: {
@@ -42,7 +45,6 @@ const eventReducer = (state = INITIAL_STATE, { type, payload }) => {
 
     case EventActions.SET_EVENT_FORM_CHANGE: {
       const { eventForm } = payload;
-      console.log('SET_EVENT_FORM_CHANGE', eventForm);
       return state
         .set('eventForm', eventForm)
         .set('data', [...state.get('data'), eventForm]);
@@ -55,9 +57,19 @@ const eventReducer = (state = INITIAL_STATE, { type, payload }) => {
     }
 
     case EventActions.SET_EVENT_ACTIVE_MODAL: {
-      console.log('SET_EVENT_ACTIVE_MODAL reducer',!state.get('active'));
       return state
         .set('active', !state.get('active'));
+    }
+
+    case EventActions.SET_REMINDER_ACTIVE_MODAL: {
+      return state
+        .set('activeList', !state.get('activeList'));
+    }
+
+    case EventActions.SET_REMINDER_SELECTED_CHANGE: {
+      const { reminderSelected } = payload;
+      return state
+        .set('reminderSelected', reminderSelected);
     }
 
     default: {

@@ -48,3 +48,24 @@ export const eventActiveModal = () => {
     }
   };
 };
+
+export const remindersListActiveModal = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(EventActions.setRemindersListActiveModal());
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
+export const reminderSelectedChange = reminderSelected => {
+  return async (dispatch) => {
+    console.log('reminderSelectedChange', reminderSelected);
+    try {
+      dispatch(EventActions.setReminderSelectedChange(reminderSelected));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+};

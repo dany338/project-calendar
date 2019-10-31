@@ -61,7 +61,6 @@ export const calculateDatesOfWeek = (start, end, month, year) => {
   let arrDaysWeek = [0, 0, 0, 0, 0, 0, 0]; // Defined array of long = 7 days
   for (let index = start; index <= end; index++) {
     const day = dayOfWeek(index, month, year);
-    // console.log('day', start, end, index, month, year, day);
     arrDaysWeek[day] = {
       dayMonthWeek: index,
       monthWeek: month,
@@ -79,7 +78,6 @@ export const calculateDatesOfWeek = (start, end, month, year) => {
       const dayEnd = dayOfWeek(end, month, year);
 
       if(index < dayStart) {
-        console.log('index < dayStart', index, dayStart);
         const dateStart = arrDaysWeek[dayStart];
         const { dayMonthWeek, monthWeek, yearMonthWeek } = dateStart;
         const daysSubtract = dayStart - index;
@@ -87,14 +85,11 @@ export const calculateDatesOfWeek = (start, end, month, year) => {
         newDate.setDate(newDate.getDate() - daysSubtract);
         // console.log('newDate = index < arrDaysWeek', dayMonthWeek, monthWeek, yearMonthWeek, daysSubtract);
       } else if(index > dayEnd) {
-        console.log('index > dayEnd', index, dayEnd);
         const dateEnd = arrDaysWeek[dayEnd];
         const { dayMonthWeek, monthWeek, yearMonthWeek } = dateEnd;
         const daysAdd = index - dayEnd;
         newDate = new Date(yearMonthWeek, monthWeek, dayMonthWeek);
         newDate.setDate(newDate.getDate() + daysAdd);
-        // console.log('newDate = index > arrDaysWeek', dayMonthWeek, monthWeek, yearMonthWeek, daysAdd);
-        console.log('index > dayEnd 2', dayStart, dayEnd, start, end, index, element, daysAdd, (new Date(yearMonthWeek, monthWeek, dayMonthWeek)).getDate());
       }
       // console.info('newDate', newDate);
 
@@ -106,8 +101,6 @@ export const calculateDatesOfWeek = (start, end, month, year) => {
       }
     }
   }
-
-  console.log('calculateDatesOfWeek 2', arrDaysWeek);
 
   return arrDaysWeek;
 };
@@ -128,15 +121,30 @@ export const getWeeksInMonth = (month, year) => {
       end=numDays;
   }
 
-  console.log('getWeeksInMonth', weeks);
   return weeks;
 };
 
-export const searchReminder = (data, dateWeek) => {
+export const searchReminder = (data, dayMonthWeek, monthWeek, yearMonthWeek) => {
   if(data.length > 0) {
-    const { dayMonthWeek, monthWeek, yearMonthWeek, dateMonthWeek } = dateWeek;
     const result = data.filter(({ dateReminder }) => {
       return ((dateReminder.getDate() === dayMonthWeek) && (dateReminder.getMonth() === monthWeek) && (dateReminder.getFullYear() === yearMonthWeek));
+    });
+    return result;
+  } else {
+    return data;
+  }
+}
+
+export const searchReminderByTitle = (data, searchText) => {
+  console.log('search', searchText);
+  const result = data.filter(({ title }) => title.includes(searchText));
+  return result;
+}
+
+export const searchReminderById = (data, id) => {
+  if(data.length > 0) {
+    const result = data.filter(({ _id }) => {
+      return (_id === id);
     });
     return result;
   } else {

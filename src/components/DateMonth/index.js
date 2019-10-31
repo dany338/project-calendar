@@ -7,12 +7,12 @@ import { connect } from 'react-redux';
 import { searchReminder } from '../../config/const';
 
 /* Dispatchers */
-import { dateSelectedChange, eventActiveModal } from '../../dispatchers';
+import { dateSelectedChange, eventActiveModal, remindersListActiveModal } from '../../dispatchers';
 
 /* Style Components */
 import { Container } from './styled';
 
-const DateMonth = ({ dateWeek, currentDate, dateSelected, data, onDateSelectedChange, onEventActiveModal }) => {
+const DateMonth = ({ dateWeek, currentDate, dateSelected, data, onDateSelectedChange, onEventActiveModal, onRemindersListActiveModal }) => {
   const { dayMonthWeek, monthWeek, yearMonthWeek, dateMonthWeek } = dateWeek;
   const { month } = currentDate;
 
@@ -21,7 +21,7 @@ const DateMonth = ({ dateWeek, currentDate, dateSelected, data, onDateSelectedCh
   const yearCurrent = dateSelected.getFullYear();
   const classSelected = ((dayMonthWeek === dayCurrent) && (monthWeek === monthCurrent) && (yearMonthWeek === yearCurrent)) ? 'selected' : '';
   const isDayMonthCurrent = (monthWeek === month);
-  const countReminders = searchReminder(data, dateWeek);
+  const countReminders = searchReminder(data, dayMonthWeek, monthWeek, yearMonthWeek);
 
   const handleCurrentDateChange = (e) => {
     onDateSelectedChange(dateMonthWeek)
@@ -30,6 +30,11 @@ const DateMonth = ({ dateWeek, currentDate, dateSelected, data, onDateSelectedCh
 
   const handleAddEvent = (e) => {
     onEventActiveModal();
+    e.stopPropagation();
+  }
+
+  const handleOpenModalReminder = (e) => {
+    onRemindersListActiveModal();
     e.stopPropagation();
   }
 
@@ -45,7 +50,7 @@ const DateMonth = ({ dateWeek, currentDate, dateSelected, data, onDateSelectedCh
           </span>
         )}
         {(countReminders.length > 0) && (
-          <span className="icon" title={`Your have ${countReminders.length} reminders in this date`}>
+          <span className="icon" onClick={(e) => handleOpenModalReminder(e)} title={`Your have ${countReminders.length} reminders in this date`}>
             <i className="fas fa-user-clock"></i>
           </span>
         )}
@@ -71,6 +76,7 @@ DateMonth.propTypes = {
   dateSelected: PropTypes.instanceOf(Date),
   data: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string,
       title: PropTypes.string,
       city: PropTypes.string,
       dateReminder: PropTypes.instanceOf(Date),
@@ -80,12 +86,12 @@ DateMonth.propTypes = {
   ),
   onDateSelectedChange: PropTypes.func.isRequired,
   onEventActiveModal: PropTypes.func.isRequired,
+  onRemindersListActiveModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
   const currentDate = (typeof state.get('calendarReducer').get('currentDate').dayWeek === 'undefined') ? state.get('calendarReducer').get('currentDate').toJS() : state.get('calendarReducer').get('currentDate');
-  const data = (typeof Array.isArray(state.get('eventReducer').get('data')) === 'undefined') ? state.get('eventReducer').get('data').toArray() : state.get('eventReducer').get('data');
-  console.log('mapStateToProps DateMonth data', data);
+  const data = (!Array.isArray(state.get('eventReducer').get('data'))) ? state.get('eventReducer').get('data').toArray() : state.get('eventReducer').get('data');
   return {
     currentDate,
     dateSelected: state.get('calendarReducer').get('dateSelected'),
@@ -96,6 +102,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   onDateSelectedChange: dateSelected => dispatch(dateSelectedChange(dateSelected)),
   onEventActiveModal: () => dispatch(eventActiveModal()),
+  onRemindersListActiveModal: () => dispatch(remindersListActiveModal()),
 })
 
 export default connect(

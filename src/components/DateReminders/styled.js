@@ -5,13 +5,18 @@ export const Container = styled.div`
   border-radius: 3px;
 
   .title {
-    flex-direction: column;
+    flex-direction: row;
     .icon {
       justify-content: flex-end;
     }
   }
 
-  .icon {
-    cursor: pointer;
+  .redonde {
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+  }
+
+  .head {
+    justify-content: space-between;
   }
 `;

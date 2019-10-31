@@ -50,15 +50,10 @@ Month.propTypes = {
 
 const mapStateToProps = state => {
   const currentDate = (typeof state.get('calendarReducer').get('currentDate').dayWeek === 'undefined') ? state.get('calendarReducer').get('currentDate').toJS() : state.get('calendarReducer').get('currentDate');
-  // console.log('mapStateToProps month', currentDate);
   return {
     currentDate,
   }
 };
-
-// const mapDispatchToProps = dispatch => {
-//   return null
-// };
 
 export default connect(
   mapStateToProps,

@@ -24,7 +24,6 @@ const Header = ({ currentDate, dateSelected, onSetMonth }) => {
     <Container>
       <div>
         <h4>{`${monthsYear[month]} of ${year}`}</h4>
-        {/* <h6>{`${daysWeek[dayWeek]} ${dayMonth}`}</h6> */}
         <h6>{`Date Selected: ${daysWeek[dayCurrentWeek]}, ${dayCurrent} of ${monthsYear[monthCurrent]} of ${yearCurrent}`}</h6>
       </div>
       <div className="icon-left">
@@ -55,7 +54,6 @@ Header.propTypes = {
 
 const mapStateToProps = state => {
   const currentDate = (typeof state.get('calendarReducer').get('currentDate').dayWeek === 'undefined') ? state.get('calendarReducer').get('currentDate').toJS() : state.get('calendarReducer').get('currentDate');
-  // console.log('mapStateToProps week', currentDate);
   return {
     currentDate,
     dateSelected: state.get('calendarReducer').get('dateSelected'),

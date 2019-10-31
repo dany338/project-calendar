@@ -39,3 +39,16 @@ export const setEventActiveModal = () => {
     type: EventActions.SET_EVENT_ACTIVE_MODAL,
   };
 };
+
+export const setRemindersListActiveModal = () => {
+  return {
+    type: EventActions.SET_REMINDER_ACTIVE_MODAL,
+  };
+};
+
+export const setReminderSelectedChange = reminderSelected => {
+  return {
+    type: EventActions.SET_REMINDER_SELECTED_CHANGE,
+    payload: { reminderSelected },
+  };
+};

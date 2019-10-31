@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 /* Components */
 import Month from '../components/Month';
 import Event from '../components/Event';
+import DateReminders from '../components/DateReminders';
 
 /* Style Components */
 import { Container } from './styled';
@@ -28,6 +29,7 @@ class Calendar extends Component {
       <Container>
         <Month />
         <Event />
+        <DateReminders />
       </Container>
     )
   }
@@ -45,7 +47,6 @@ Calendar.propTypes = {
 
 const mapStateToProps = state => {
   const currentDate = (typeof state.get('calendarReducer').get('currentDate').dayWeek === 'undefined') ? state.get('calendarReducer').get('currentDate').toJS() : state.get('calendarReducer').get('currentDate');
-  // console.log('mapStateToProps calendar', currentDate);
   return {
     currentDate,
   }
